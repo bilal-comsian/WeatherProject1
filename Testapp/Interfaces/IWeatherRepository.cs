@@ -2,7 +2,7 @@
 
 namespace Testapp.Interfaces
 {
-    public interface IWeatherRepository : IRepository<WeatherForecast>
+    public interface IWeatherRepository : IGenericRepository<WeatherForecast>
     {
     }
 }

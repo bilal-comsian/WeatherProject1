@@ -2,7 +2,7 @@
 
 namespace Testapp.Interfaces
 {
-    public interface ICountryRepository : IRepository<Country>
+    public interface ICountryRepository : IGenericRepository<Country>
     {
     }
 }

@@ -9,7 +9,7 @@ namespace Testapp.Repository
         {
         }
 
-        public DbSet<WeatherForecast> Weather { get; set; }
+        public DbSet<WeatherForecast> CityWeather { get; set; }
         public DbSet<City> City { get; set; }
         public DbSet<Country> Country { get; set; }
         //public DbSet<Order> Orders { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Testapp.Interfaces
 {
-    public interface ICityRepository : IRepository<City>
+    public interface ICityRepository : IGenericRepository<City>
     {
     }
 }

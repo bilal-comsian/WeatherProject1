@@ -7,7 +7,8 @@ namespace Testapp.Model
     public class WeatherForecast
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public int CityId { get;set; }
+        public DateTime RecordTime { get; set; }
         
         public double TemperatureC { get; set; }
         [NotMapped]

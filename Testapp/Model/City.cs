@@ -1,9 +1,12 @@
-﻿namespace Testapp.Model
+﻿using System.Text.Json.Serialization;
+
+namespace Testapp.Model
 {
     public class City
     {
-        public int ID { get; set; }
+        //[JsonIgnore]
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string ISO { get; set; }
+        public string CountryId { get; set; }
     }
 }

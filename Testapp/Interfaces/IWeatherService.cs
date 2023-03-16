@@ -6,7 +6,7 @@ namespace Testapp.Interfaces
     {
         Task<bool> AddWeather(WeatherForecast weather);
 
-        Task<IEnumerable<WeatherForecast>> GetAllWeathers();
+        Task<IEnumerable<WeatherForecast>> GetAllWeathers(string City);
 
         Task<WeatherForecast> GetWeatherById(int weatherId);
 

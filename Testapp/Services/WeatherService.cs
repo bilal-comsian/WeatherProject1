@@ -2,6 +2,7 @@
 using Testapp.Repository;
 using Microsoft.EntityFrameworkCore;
 using Testapp.Interfaces;
+using Testapp.Client;
 
 namespace Testapp.Services
 {
@@ -49,10 +50,31 @@ namespace Testapp.Services
             return false;
         }
 
-        public async Task<IEnumerable<WeatherForecast>> GetAllWeathers()
+        public async Task<IEnumerable<WeatherForecast>> GetAllWeathers(string cityId)
         {
-            var weathers = await _unitOfWork.Weathers.GetAll();
-            return weathers;
+            if (!string.IsNullOrEmpty(cityId))
+            {
+                var _city= (await _unitOfWork.Cities.GetListAsync(x => x.Name == cityId)).FirstOrDefault();
+                if (_city != null)
+                {
+                    WeatherResponse weatherResponse = new WeatherResponse();
+                    HttpClient client = new HttpClient();
+                    HttpResponseMessage response = await client.GetAsync($"http://api.weatherapi.com/v1/current.json?key=8677691c791b4b20ba362900231403&q={cityId}&aqi=yes");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        weatherResponse = await response.Content.ReadFromJsonAsync<WeatherResponse>();
+                        WeatherForecast weatherForecast = new WeatherForecast();
+                        weatherForecast.TemperatureC = weatherResponse.current.temp_c;
+                        weatherForecast.WindSpeed = weatherResponse.current.wind_kph;
+                        weatherForecast.Summary = weatherResponse.current.condition.text;
+                        weatherForecast.RecordTime = DateTime.Now;
+                        weatherForecast.CityId = _city.Id;
+                        await AddWeather(weatherForecast);
+                    }
+                }
+                return await _unitOfWork.Weathers.GetListAsync(x=>x.CityId==_city!.Id);
+            }
+             return await _unitOfWork.Weathers.GetAll();
         }
 
         public async Task<WeatherForecast> GetWeatherById(int weatherId)
@@ -75,7 +97,7 @@ namespace Testapp.Services
                 var _weather = await _unitOfWork.Weathers.GetById(weather.Id);
                 if (_weather != null)
                 {
-                    _weather.Date = weather.Date;
+                    _weather.RecordTime = weather.RecordTime;
                     _weather.TemperatureC= weather.TemperatureC;
                     _weather.Summary = weather.Summary;
 

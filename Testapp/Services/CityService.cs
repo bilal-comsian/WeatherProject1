@@ -5,14 +5,23 @@ namespace Testapp.Services
 {
     public class CityService : ICityService
     {
-        public Task<IEnumerable<WeatherForecast>> GetAllCities()
+        public IUnitOfWork _unitOfWork;
+        public CityService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+        public Task<IEnumerable<City>> GetAllCities()
         {
             throw new NotImplementedException();
         }
 
-        public Task<WeatherForecast> GetCityByCountryId(int countryId)
+        public async Task<IEnumerable<City>> GetCityByCountryId(string countryId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(countryId))
+                return await GetAllCities();
+            else
+                return await _unitOfWork.Cities
+                    .GetListAsync(x => x.CountryId == countryId);
         }
     }
 }
